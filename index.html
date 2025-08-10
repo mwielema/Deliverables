@@ -60,25 +60,5 @@
             <script src="flipcardscript.js" defer></script>
         </div>
     </div>
-    <script>
-        function postHeight() {
-            // Use document.documentElement.scrollHeight to get the full height of the content
-            const height = document.documentElement.scrollHeight;
-
-            // Post the height to the parent window. The target origin is set to '*' for
-            // simplicity, but should ideally be the specific domain of the parent page for security.
-            window.parent.postMessage({ iframeHeight: height }, '*');
-        }
-
-        // Use a ResizeObserver to automatically send the height whenever the content size changes.
-        // This is robust and handles dynamic content like the flip card.
-        const resizeObserver = new ResizeObserver(() => postHeight());
-
-        // Start observing the body of the page for any size changes.
-        resizeObserver.observe(document.body);
-
-        // Also call the function once on initial load to set the correct height.
-        window.addEventListener('load', postHeight);
-    </script>
 </body>
 </html>

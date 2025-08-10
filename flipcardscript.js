@@ -58,6 +58,23 @@ function updateChartDimensions() {
     containerHeight = Math.max(0, availableHeightForCharts);
 }
 
+function dispatchFrontCardHeight() {
+    const frontCard = document.getElementById('my-d3-chart').querySelector('.flip-card-front');
+    if (frontCard) {
+        // Get the full scroll height of the front card's content
+        const totalContentHeight = frontCard.scrollHeight;
+
+        // Post the height to the parent window.
+        // We are using window.parent.postMessage to communicate with the parent page.
+        // The target origin is set to '*' for simplicity, but should be the specific
+        // domain of the parent page for better security if known.
+        window.parent.postMessage({ iframeHeight: totalContentHeight }, '*');
+
+        // Log the height to the console for debugging, as requested.
+        console.log('Front card height measured:', totalContentHeight, 'px');
+    }
+}
+
 // --- Flip Card Functionality ---
 const flipCard = myD3Chart.querySelector('#flipCard');
 const flipCardInner = myD3Chart.querySelector('.flip-card-inner'); // Get inner element
@@ -275,6 +292,7 @@ function renderTable() {
                     .html(currentTableSort.direction === 'asc' ? '&#9650;' : '&#9660;'); // Up or down arrow
             }
         });
+dispatchFrontCardHeight();
 }
 
 // --- D3 Charts (Back Card) ---
