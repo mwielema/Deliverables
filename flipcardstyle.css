@@ -1,0 +1,263 @@
+/* Custom CSS for Flip Card - Scoped to #my-d3-chart */
+#my-d3-chart .segment {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    overflow: hidden; /* Prevent scrollbar from bounce effect */
+}
+
+#my-d3-chart .flip-card {
+    background-color: transparent;
+    width: 90vw; /* 90% of viewport width */
+    max-width: 900px; /* Max width on large screens */
+    height: 600px; /* Fixed height for the card, now managed by JS */
+    perspective: 1000px; /* 3D effect */
+    border-radius: 1rem; /* Rounded corners */
+}
+
+#my-d3-chart .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Height will be set by JS */
+    text-align: center;
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bounce transition */
+    transform-style: preserve-3d;
+    border-radius: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+#my-d3-chart .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+#my-d3-chart .flip-card-front, 
+#my-d3-chart .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%; /* Take 100% of parent's height, which is set by JS */
+    -webkit-backface-visibility: hidden; /* Hide the back of the card when flipped */
+    backface-visibility: hidden;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column; /* Changed to column to stack title and charts */
+    justify-content: flex-start; /* Align content to the start (top) */
+    align-items: center;
+    padding: 1.5rem; /* Re-added original padding */
+    box-sizing: border-box;
+    overflow: hidden; /* Ensure content stays within bounds */
+}
+
+#my-d3-chart .flip-card-front {
+    background-color: #ffffff;
+    color: black;
+}
+
+#my-d3-chart .flip-card-back {
+    background-color: #ffffff;
+    color: black;
+    transform: rotateY(180deg);
+    /* Ensure the back content is laid out correctly */
+    display: flex;
+    flex-direction: column; /* Use column to stack title and chart area */
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.5rem; /* Consistent padding with front */
+    box-sizing: border-box;
+}
+
+#my-d3-chart .flip-icon {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    transition: background-color 0.3s ease; /* Only background transition here */
+    background-color: white; /* Added white background */
+    box-shadow: 0 0 5px rgba(0,0,0,0.1); /* Optional: subtle shadow for better visibility */
+}
+
+#my-d3-chart .flip-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Removed previous opacity/pointer-events CSS for icons */
+
+#my-d3-chart .arrow-icon {
+    position: absolute;
+    width: 24px; /* Reduced width */
+    height: auto; /* Maintain aspect ratio */
+    cursor: pointer;
+    z-index: 10;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+#my-d3-chart .arrow-icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#my-d3-chart .arrow-left {
+    left: 1rem;
+}
+
+#my-d3-chart .arrow-right {
+    right: 1rem;
+}
+
+/* D3 Chart Specific Styles */
+#my-d3-chart .chart-area {
+    display: flex;
+    flex-direction: row; /* Charts side-by-side */
+    justify-content: center;
+    align-items: flex-start; /* Changed from center to flex-start */
+    gap: 1rem; /* Space between charts */
+    width: 100%; /* Take full width of parent */
+    flex-grow: 1; /* Allow to grow and take available space */
+    overflow: hidden; /* Hide overflow from charts */
+    /* Removed margin-top: 1.5rem; */
+}
+
+#my-d3-chart .chart-container {
+    flex-shrink: 0; /* Prevent shrinking below content */
+    transition: width 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Bounce transition */
+    overflow: hidden; /* Hide content when collapsed */
+    display: flex;
+    flex-direction: column; /* Ensure content stacks from top */
+    justify-content: flex-start; /* Changed from center to flex-start */
+    align-items: flex-start; /* Changed from center to flex-start */
+    height: 100%; /* Take full height of back card */
+    position: relative; /* Added for absolute positioning of toggle */
+}
+
+#my-d3-chart .chart-container.collapsed {
+    width: 0 !important; /* Collapse width */
+    opacity: 0; /* Fade out */
+    margin: 0 !important; /* Remove margin when collapsed */
+}
+
+#my-d3-chart .chart-container.expanded {
+    width: 80% !important; /* Expand to 80% of flip card width */
+    opacity: 1; /* Fade in */
+}
+
+/* Donut chart specific styles */
+#my-d3-chart .donut-percentage-text {
+    text-anchor: middle;
+    dominant-baseline: central;
+    font-size: 4rem; /* Large size for percentage */
+    font-weight: bold;
+    /* fill property removed - now set by JS */
+}
+
+#my-d3-chart .donut-description-text {
+    text-anchor: middle;
+    dominant-baseline: central;
+    font-size: 0.9rem; /* Smaller size for descriptive text */
+    /* fill property removed - now set by JS */
+}
+
+/* Bar chart specific styles (for both stacked and horizontal) */
+#my-d3-chart .bar-label {
+    font-size: 0.8rem;
+    text-anchor: end; /* Default for labels to the left of bars */
+}
+
+#my-d3-chart .percentage-label {
+    font-size: 0.8rem;
+    text-anchor: start;
+    fill: #333;
+}
+
+#my-d3-chart .sort-controls {
+    display: flex; /* Use flexbox for horizontal alignment */
+    align-items: center; /* Vertically align items */
+    gap: 0.5rem; /* Space between text and button */
+    /* Removed absolute positioning as it's now part of flex layout */
+}
+
+#my-d3-chart .sort-button {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 0.25rem 0.75rem; /* Reduced padding here */
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+    pointer-events: all; /* Ensure clicks are captured */
+}
+
+#my-d3-chart .sort-button:hover {
+    background-color: #d0d0d0;
+}
+
+#my-d3-chart .category-heading {
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: left;
+    width: 100%;
+    padding-left: 10px;
+}
+
+/* Table styles */
+#my-d3-chart .data-table {
+    width: 80%; /* Reduced width as requested */
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+#my-d3-chart .data-table th, 
+#my-d3-chart .data-table td {
+    border: 1px solid #e2e8f0;
+    padding: 0.3rem; /* Reduced padding for more compact rows */
+    text-align: left;
+}
+
+#my-d3-chart .data-table th {
+    background-color: #f8fafc;
+    font-weight: 600;
+    position: sticky; /* Make headings sticky */
+    top: 0; /* Stick to the top of the scrollable container */
+    z-index: 1; /* Ensure it stays above scrolling content */
+    cursor: pointer; /* Indicate clickable headers */
+}
+
+#my-d3-chart .data-table th:hover {
+    background-color: #e2e8f0;
+}
+
+#my-d3-chart .data-table tr:nth-child(even) {
+    background-color: #f0f2f5;
+}
+
+#my-d3-chart .data-table tr:hover {
+    background-color: #e2e8f0;
+}
+
+/* Updated style for table-container */
+#my-d3-chart #table-container {
+    width: 100%;
+    height: auto; /* Allow height to adjust to content */
+    overflow: visible; /* Allow content to expand without scrollbar */
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Content inside stacks vertically */
+    justify-content: flex-start; /* Align content to the start (top) */
+    align-items: center; /* Horizontally center content */
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Smooth transition */
+}
+
+/* Hide table container when flipped */
+#my-d3-chart .flip-card.flipped #table-container {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Disable interactions when hidden */
+}

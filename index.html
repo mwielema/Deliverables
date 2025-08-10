@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Weights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="output.css" rel="stylesheet">
+    <script src="d3.v7.min.js" defer></script>
+    <link rel="stylesheet" href="flipcardstyle.css">
+</head>
+<body>
+
+    <div id="my-d3-chart" class="font-roboto">
+        <div id="segment" class="bg-gray-100 flex items-center justify-center min-h-screen">
+            <div id="flipCard" class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front rounded-xl shadow-lg">
+                        <img src="icon-chart.png" alt="Flip to Chart" class="flip-icon" id="flipToChartIcon">
+                        <h2 class="text-2xl font-bold mb-4 text-gray-800">Course Weights</h2>
+                        <div id="table-container" class="w-full h-full overflow-auto">
+                            </div>
+                    </div>
+                    <div class="flip-card-back rounded-xl shadow-lg relative h-full">
+                        <img src="icon-table.png" alt="Flip to Table" class="flip-icon" id="flipToTableIcon" style="display: none;">
+                        <img src="Arrow-Left.png" alt="Previous Chart" class="arrow-icon arrow-left hidden" id="arrowLeft">
+                        <img src="Arrow-Right.png" alt="Next Chart" class="arrow-icon arrow-right hidden" id="arrowRight">
+                        <h2 class="text-2xl font-bold mb-2 text-gray-800">Course Weights</h2> <div class="flex items-center justify-center w-full mb-1 px-4 gap-4">
+                            <p id="chart-subtitle" class="text-lg text-gray-600"></p>
+                            <div class="sort-controls flex items-center gap-2">
+                                <div class="text-sm text-gray-700">Sorted by</div>
+                                <select id="primarySortSelect" class="sort-button">
+                                    <option value="All">All</option>
+                                    <option value="Component">Component</option>
+                                    <option value="Type">Type</option>
+                                </select>
+                                <select id="secondarySortSelect" class="sort-button">
+                                    <option value="Weight">Weight</option>
+                                    <option value="Sequence">Sequence</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="stackedToggleContainer" class="flex items-center gap-1 hidden">
+                            <input type="checkbox" id="stackedToggle" class="form-checkbox h-3 w-3 text-blue-600">
+                            <label for="stackedToggle" class="text-xs text-gray-700">Aggregate individual & teams weights for the same deliverable</label>
+                        </div>
+                        <div class="chart-area"> <div id="donut-chart-container" class="chart-container expanded"></div>
+                            <div id="stacked-bar-chart-container" class="chart-container collapsed"></div>
+                            <div id="horizontal-bar-chart-container" class="chart-container collapsed">
+                            </div>
+                        </div>
+                        <div class="absolute bottom-2 right-2 text-xs text-gray-400">
+                            Designed 2025 by M. Wielemaker with use of Google Gemini
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="flipcardscript.js" defer></script>
+        </div>
+    </div>
+    <script>
+        function postHeight() {
+            // Use document.documentElement.scrollHeight to get the full height of the content
+            const height = document.documentElement.scrollHeight;
+
+            // Post the height to the parent window. The target origin is set to '*' for
+            // simplicity, but should ideally be the specific domain of the parent page for security.
+            window.parent.postMessage({ iframeHeight: height }, '*');
+        }
+
+        // Use a ResizeObserver to automatically send the height whenever the content size changes.
+        // This is robust and handles dynamic content like the flip card.
+        const resizeObserver = new ResizeObserver(() => postHeight());
+
+        // Start observing the body of the page for any size changes.
+        resizeObserver.observe(document.body);
+
+        // Also call the function once on initial load to set the correct height.
+        window.addEventListener('load', postHeight);
+    </script>
+</body>
+</html>
